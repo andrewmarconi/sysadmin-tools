@@ -15,3 +15,5 @@ chkconfig postgresql-9.4 on
 service postgresql-9.4 start
 #su - postgres
 #psql
+
+# /etc/init.d/nginx start
