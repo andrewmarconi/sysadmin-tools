@@ -4,7 +4,6 @@ yum -y update
 yum groupinstall -y 'development tools'
 yum install -y zlib-dev openssl-devel sqlite-devel bzip2-devel wget nmap 
 yum install -y epel-release 
-yum install -y nginx fail2ban
 
 echo "--> Configuring firewall to allow port 80 access (Web)..."
 iptables -I INPUT 5 -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
@@ -12,6 +11,7 @@ service iptables save
 service iptables restart
 
 echo "--> Configuring fail2ban (secure SSH)..."
+yum install -y fail2ban
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 service fail2ban start
 
@@ -25,9 +25,13 @@ make
 make altinstall
 ln -s /usr/local/bin/python2.7 /usr/local/bin/python
 
-echo "------------------------------------"
-echo "Now there are two steps to complete:"
-echo "------------------------------------"
+echo "--> Install nginx and start the service..."
+yum install -y nginx
+/etc/init.d/nginx start
+
+echo "---------------------------------------------"
+echo "Now there are two steps to complete manually."
+echo "---------------------------------------------"
 echo " "
 echo "1. Update your ~/.bash_profile to place /usr/local/bin at the beginning."
 echo " "
