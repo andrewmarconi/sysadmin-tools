@@ -16,6 +16,58 @@ service postgresql-9.4 start
 #su - postgres
 #psql
 
+
+echo "--> Installing Java and Tomcat..."
+yum install -y java
+yum -y install tomcat6 tomcat6-webapps tomcat6-admin-webapps
+chkconfig tomcat6 on
+service tomcat6 start
+
+#Temporarily open port 8080 for Tomcat (We'll close it later)
+iptables -I INPUT 7 -p tcp --dport 8080 -j ACCEPT
+service iptables save
+
+vi /etc/tomcat6/tomcat-users.xml
+echo "!!!!! TODO - Add roles and users to file."
+# Add these inside the <tomcat-users> block:
+#<role rolename="manager" />
+#<role rolename="admin" />
+#<user username="solr" password="je7S9Yad2kAf2Ji0Hen4youd4hog2H" roles="manager,admin" />
+#
+service tomcat6 restart
+
+echo "--> Installing Apache Commons Loggins..."
+http://mirror.cogentco.com/pub/apache//commons/logging/binaries/commons-logging-1.2-bin.tar.gz
+tar zxf commons-logging-1.2-bin.tar.gz
+cd commons-logging-1.2
+cp commons-logging-*.jar /usr/share/tomcat6/lib
+
+echo "Installing SLF4J..."
+wget http://www.slf4j.org/dist/slf4j-1.7.10.tar.gz
+tar xvf slf4j-1.7.10.tar.gz
+cd slf4j-1.7.10
+rm -f slf4j-android-*.jar
+cp slf4j-*.jar /usr/share/tomcat6/lib
+
+echo "--> Install Solr..."
+wget http://mirror.olnevhost.net/pub/apache/lucene/solr/5.0.0/solr-5.0.0.tgz
+tar xvf solr-5.0.0.tgz
+cp solr-5.0.0/dist/solr-*.jar /usr/share/tomcat6/lib
+cp solr-5.0.0/server/webapps/solr.war /usr/share/tomcat6/webapps/solr.war
+mkdir /srv/solr
+cp -R solr-5.0.0/server/solr/* /srv/solr
+chown -R tomcat /srv/solr
+service tomcat6 restart
+vi /usr/share/tomcat6/webapps/solr/WEB-INF/web.xml
+echo "!!!!! TODO - Update solr configuration."
+# Update to read (remove the comment tags):
+# <env-entry>
+#    <env-entry-name>solr/home</env-entry-name>
+#    <env-entry-value>/srv/solr</env-entry-value>
+#    <env-entry-type>java.lang.String</env-entry-type>
+# </env-entry>
+service tomcat restart
+
 echo "--> Cleaning up..."
 cd ~
 rm -Rf ~/Install
