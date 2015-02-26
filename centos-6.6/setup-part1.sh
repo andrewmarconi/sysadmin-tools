@@ -2,7 +2,9 @@
 echo "--> Initial update and installation of packages..."
 yum -y update
 yum groupinstall -y 'development tools'
-yum install -y zlib-dev openssl-devel sqlite-devel bzip2-devel wget nmap epel-release nginx fail2ban
+yum install -y zlib-dev openssl-devel sqlite-devel bzip2-devel wget nmap 
+yum install -y epel-release 
+yum install -y nginx fail2ban
 
 echo "--> Configuring firewall to allow port 80 access (Web)..."
 iptables -I INPUT 5 -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
