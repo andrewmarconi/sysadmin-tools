@@ -1,5 +1,7 @@
 #!/bin/bash
 echo "--> Initial update and installation of packages..."
+mkdir ~/Install
+cd ~/Install
 yum -y update
 yum groupinstall -y 'development tools'
 yum install -y zlib-dev openssl-devel sqlite-devel bzip2-devel wget nmap 
