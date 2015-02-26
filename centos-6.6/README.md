@@ -11,7 +11,7 @@ There are two parts, the first sets does a lot of the core installation, updates
 To use, sign in to your freshly-installed Centos 6.6 server, and issue the following command as root:
 
 ```bash
-curl -s https://raw.githubusercontent.com/andrewmarconi/sysadmin-tools/master/centos-6.6/setup-part1.sh | base
+curl -s https://raw.githubusercontent.com/andrewmarconi/sysadmin-tools/master/centos-6.6/setup-part1.sh | bash
 ```
 
 
@@ -28,7 +28,7 @@ Disable the default PostgreSQL packages in CentOS-Base to prep for installation 
 
 ### Step 4
 ```bash
-curl -s https://raw.githubusercontent.com/andrewmarconi/sysadmin-tools/master/centos-6.6/setup-part2.sh | base
+curl -s https://raw.githubusercontent.com/andrewmarconi/sysadmin-tools/master/centos-6.6/setup-part2.sh | bash
 ```
 
 ### TODO
