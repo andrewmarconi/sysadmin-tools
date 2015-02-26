@@ -6,8 +6,33 @@ These are a few things you need to do manually that are documented at the end of
 
 There are two parts, the first sets does a lot of the core installation, updates and compilation. Part 2 handles installing some Python tools and installs Postgres.
 
+
+### Step 1
 To use, sign in to your freshly-installed Centos 6.6 server, and issue the following command as root:
 
 ```bash
 curl -s https://raw.githubusercontent.com/andrewmarconi/sysadmin-tools/master/centos-6.6/setup-part1.sh | base
 ```
+
+
+### Step 2
+Update your ~/.bash_profile to place /usr/local/bin at the beginning.
+
+    PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin
+
+
+### Step 3
+Disable the default PostgreSQL packages in CentOS-Base to prep for installation from the most recent stable source, by adding
+'exclude=postgresql*' to the bottom of the [base] and [updates] sections of /etc/yum.repos.d/CentOS.Base.repo.
+
+
+### Step 4
+```bash
+curl -s https://raw.githubusercontent.com/andrewmarconi/sysadmin-tools/master/centos-6.6/setup-part2.sh | base
+```
+
+### TODO
+* Configure nginx
+* Configure gunicorn
+* Init virtualenv and handle deployment
+
