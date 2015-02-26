@@ -18,7 +18,7 @@ curl -s https://raw.githubusercontent.com/andrewmarconi/sysadmin-tools/master/ce
 ### Step 2
 Update your ~/.bash_profile to place /usr/local/bin at the beginning.
 
-    PATH=/usr/local/bin:/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin
+    PATH=/usr/local/bin:/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:$HOME/bin
 
 
 ### Step 3
