@@ -5,3 +5,8 @@ These scripts help to automate setup of Centos 6.6-based systems for hosting Pyt
 These are a few things you need to do manually that are documented at the end of each script. Eventually, I'll automate this, but at the moment, this is sufficient to save some time while doing a deployment.
 
 There are two parts, the first sets does a lot of the core installation, updates and compilation. Part 2 handles installing some Python tools and installs Postgres.
+
+To use, sign in to your freshly-installed Centos 6.6 server, and issue the following command as root:
+
+curl -s https://raw.githubusercontent.com/andrewmarconi/sysadmin-tools/master/centos-6.6/setup-part1.sh | base
+
