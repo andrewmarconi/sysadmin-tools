@@ -22,9 +22,11 @@ Update your ~/.bash_profile to place /usr/local/bin at the beginning.
 
 
 ### Step 3
-Disable the default PostgreSQL packages in CentOS-Base to prep for installation from the most recent stable source, by adding
-'exclude=postgresql*' to the bottom of the [base] and [updates] sections of /etc/yum.repos.d/CentOS.Base.repo.
-
+Disable the default PostgreSQL packages in CentOS-Base to prep for installation from the most recent stable source. Edit the repo file:
+```bash
+vi /etc/yum.repos.d/CentOS-Base.repo
+```
+Then, add 'exclude=postgresql*' to the bottom of both the [base] and [updates] sections. Save the file and exit out.
 
 ### Step 4
 ```bash
