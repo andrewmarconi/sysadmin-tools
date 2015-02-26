@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "--> Install setuptools and pip..."
-cd ~
+cd ~/Install
 wget https://bootstrap.pypa.io/ez_setup.py -O - | python
 wget https://bootstrap.pypa.io/get-pip.py -O - | python
 pip install virtualenv
