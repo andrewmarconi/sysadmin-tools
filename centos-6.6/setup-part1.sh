@@ -22,7 +22,6 @@ cd Python-2.7.9
 make
 make altinstall
 ln -s /usr/local/bin/python2.7 /usr/local/bin/python
-/etc/init.d/nginx start
 
 echo "------------------------------------"
 echo "Now there are two steps to complete:"
