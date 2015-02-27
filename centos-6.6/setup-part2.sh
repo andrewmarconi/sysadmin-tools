@@ -37,7 +37,7 @@ echo "!!!!! TODO - Add roles and users to file."
 service tomcat6 restart
 
 echo "--> Installing Apache Commons Loggins..."
-http://mirror.cogentco.com/pub/apache//commons/logging/binaries/commons-logging-1.2-bin.tar.gz
+http://mirror.cogentco.com/pub/apache/commons/logging/binaries/commons-logging-1.2-bin.tar.gz
 tar zxf commons-logging-1.2-bin.tar.gz
 cd commons-logging-1.2
 cp commons-logging-*.jar /usr/share/tomcat6/lib
@@ -50,15 +50,26 @@ rm -f slf4j-android-*.jar
 cp slf4j-*.jar /usr/share/tomcat6/lib
 
 echo "--> Install Solr..."
-wget http://mirror.olnevhost.net/pub/apache/lucene/solr/5.0.0/solr-5.0.0.tgz
-tar xvf solr-5.0.0.tgz
-cp solr-5.0.0/dist/solr-*.jar /usr/share/tomcat6/lib
-cp solr-5.0.0/server/webapps/solr.war /usr/share/tomcat6/webapps/solr.war
-mkdir /srv/solr
-cp -R solr-5.0.0/server/solr/* /srv/solr
+## Solr 5.0.0 and Haystack are not compatible at the moment due to depreciation issues.
+
+#wget http://mirror.olnevhost.net/pub/apache/lucene/solr/5.0.0/solr-5.0.0.tgz
+#tar xvf solr-5.0.0.tgz
+#cp solr-5.0.0/dist/solr-*.jar /usr/share/tomcat6/lib
+#cp solr-5.0.0/server/webapps/solr.war /usr/share/tomcat6/webapps/solr.war
+#mkdir /srv/solr
+#cp -R solr-5.0.0/server/solr/* /srv/solr
+#chown -R tomcat /srv/solr
+#service tomcat6 restart
+#vi /usr/share/tomcat6/webapps/solr/WEB-INF/web.xml
+
+wget http://www.eng.lsu.edu/mirrors/apache/lucene/solr/4.9.1/solr-4.9.1.tgz
+tar xvf solr-4.9.1.tgz
+cp solr-4.9.1/dist/solr-*.jar /usr/share/tomcat6/lib
+cp solr-4.9.1/example/webapps/solr.war /srv/solr
 chown -R tomcat /srv/solr
 service tomcat6 restart
 vi /usr/share/tomcat6/webapps/solr/WEB-INF/web.xml
+
 echo "!!!!! TODO - Update solr configuration."
 # Update to read (remove the comment tags):
 # <env-entry>
@@ -66,7 +77,7 @@ echo "!!!!! TODO - Update solr configuration."
 #    <env-entry-value>/srv/solr</env-entry-value>
 #    <env-entry-type>java.lang.String</env-entry-type>
 # </env-entry>
-service tomcat restart
+service tomcat6 restart
 
 echo "--> Cleaning up..."
 cd ~
