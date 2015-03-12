@@ -1,9 +1,10 @@
 #!/bin/bash
-echo "--> Install setuptools and pip..."
-cd ~/Install
-wget https://bootstrap.pypa.io/ez_setup.py -O - | python
-wget https://bootstrap.pypa.io/get-pip.py -O - | python
-pip install virtualenv
+
+# echo "2. Disable the default PostgreSQL packages in CentOS-Base to prep for"
+# echo "   installation from the most recent stable source, by adding"
+# echo "   'exclude=postgresql*' to the bottom of the [base] and [updates]"
+# echo "   sections of /etc/yum.repos.d/CentOS.Base.repo"
+# echo " "
 
 echo "--> Install Postgres 9.4..."
 cd ~/Install
@@ -15,7 +16,6 @@ chkconfig postgresql-9.4 on
 service postgresql-9.4 start
 #su - postgres
 #psql
-
 
 echo "--> Installing Java and Tomcat..."
 yum install -y java
