@@ -1,4 +1,29 @@
 #!/bin/bash
+MYPASS=$(mkpasswd -l 16 -d 4 -c 4 -C 4 -s 4)
+
+echo "--> Setting up non-root user..."
+echo ""
+echo "What username would you like to use? Note that this should probably be short, lower-case, and without any special characters."
+read MYUSER
+useradd $MYUSER
+echo $MYPASS | passwd $MYUSER --stdin
+usermod -G wheel $MYUSER
+
+# TODO Add ability for local wheel users to sudo.
+# if [ -f "/etc/sudoers.tmp" ]; then
+#     exit 1
+# fi
+# touch /etc/sudoers.tmp
+# cp /etc/sudoers /tmp/sudoers.new
+# sed 's/# %wheel\tALL=(ALL)\tALL/%wheel\tALL=(ALL)\tALL/g' /tmp/sudoers.new > /tmp/sudoers.new
+# visudo -c -f /tmp/sudoers.new
+# if [ "$?" -eq "0" ]; then
+#   echo "Press 'Y' to the prompt below:"
+#   cp -f /tmp/sudoers.new /etc/sudoers
+# fi
+# rm /etc/sudoers.tmp
+
+
 echo "--> Initial update and installation of packages..."
 mkdir ~/Install
 cd ~/Install
@@ -6,7 +31,7 @@ yum -y update
 yum install -y epel-release
 
 echo "--> Adding support for remote TextMate editing..."
-curl -Lo /usr/local/bin/rmate https://raw.github.com/textmate/rmate/master/bin/rmate
+curl -Lo /usr/local/bin/rmate https://raw.githubusercontent.com/textmate/rmate/master/bin/rmate
 chmod a+x /usr/local/bin/rmate
 yum install -y ruby
 
@@ -16,7 +41,7 @@ yum groupinstall -y 'development tools'
 yum install -y zlib-dev openssl-devel sqlite-devel bzip2-devel libxml2-devel
 yum install -y openssl-devel readline-devel ncurses-devel tk-devel python-ctypesgen gdbm-devel
 yum install -y libmcrypt-devel zlib-devel libcurl-devel libexif-devel openjpeg-devel libpng-devel
-yum install -y gd re2c freetype-devel wget nmap
+yum install -y gd re2c freetype-devel wget nmap expect
 
 echo "--> Install MariaDB..."
 printf "# MariaDB 10.0 CentOS repository list - created 2015-03-12 03:25 UTC\n" > /etc/yum.repos.d/MariaDB-10.repo
@@ -94,9 +119,48 @@ cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 service fail2ban start
 
 echo "--> Just a bit of housekeeping..."
+cd ~
 rm -R -f  ~/Install/
-
+echo "--> Securing the MariaDB installation (this may take just a moment)..."
+SECURE_MYSQL=$(expect -c "
+set timeout 10
+spawn mysql_secure_installation
+expect \"Enter current password for root (enter for none):\"
+send \"\r\"
+expect \"Change the root password?\"
+send \"y\r\"
+expect \"New password:\"
+send \"$MYPASS\r\"
+expect \"Re-enter new password:\"
+send \"$MYPASS\r\"
+expect \"Remove anonymous users?\"
+send \"y\r\"
+expect \"Disallow root login remotely?\"
+send \"y\r\"
+expect \"Remove test database and access to it?\"
+send \"y\r\"
+expect \"Reload privilege tables now?\"
+send \"y\r\"
+expect eof
+")
+echo "$SECURE_MYSQL"
 echo "====================================================================================================================="
-echo "Now, we're going to secure the MariaDB installation. The initial password is blank, so just hit enter at that prompt."
+echo "MariaDB Credentials:"
+echo ""
+echo "Username: root"
+echo "Password: $MYPASS"
+echo ""
+echo "If you're not happy with the password above, you can change it by issuing the following command, and then"
+echo "supplying the above password as the current password:"
+echo ""
+echo "$ mysqladmin password -u root -p"
+echo ""
 echo "====================================================================================================================="
-mysql_secure_installation
+echo "Non-Root System User:"
+echo ""
+echo "Username: $MYUSER"
+echo "Password: $MYPASS"
+echo ""
+echo "You can sign in via ssh with this account."
+echo "====================================================================================================================="
+echo ""
